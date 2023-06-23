@@ -8,6 +8,7 @@
 #if os(iOS)
     import Foundation
     import GoogleSignIn
+    import SwiftUI
     import UIKit
 
     public struct GoogleSignInButton: UIViewRepresentable {

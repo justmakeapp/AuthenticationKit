@@ -255,7 +255,7 @@ public final class AmplifyAuthenticationService: Authenticating {
         return []
     }
 
-    private static func getAmplifyUserFromRemote() async throws -> AmplifyUser {
+    static func getAmplifyUserFromRemote() async throws -> AmplifyUser {
         async let attributesAsync = try Amplify.Auth.fetchUserAttributes()
         async let currentUserAsync = try Amplify.Auth.getCurrentUser()
 

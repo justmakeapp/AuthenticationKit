@@ -6,6 +6,10 @@
 //
 
 #if os(iOS)
+    import AuthKit
+    import AuthKitUI
+    import Combine
+    import Firebase
     import Foundation
     import UIKit
 

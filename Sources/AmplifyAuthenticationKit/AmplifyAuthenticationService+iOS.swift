@@ -6,6 +6,10 @@
 //
 
 #if os(iOS)
+    import Amplify
+    import AuthKit
+    import AuthKitUI
+    import Combine
     import Foundation
     import UIKit
 

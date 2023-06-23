@@ -72,3 +72,9 @@ public extension CustomSignInButton {
         then { $0.configuration.debounceTime = value }
     }
 }
+
+struct SignInButton_Previews: PreviewProvider {
+    static var previews: some View {
+        CustomSignInButton(type: .apple, action: {})
+    }
+}
