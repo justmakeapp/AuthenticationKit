@@ -25,6 +25,7 @@ public struct CustomSignInButton: View {
                 type.image
 
                 Text(type.title)
+                    .minimumScaleFactor(0.8)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
@@ -75,6 +76,14 @@ public extension CustomSignInButton {
 
 struct SignInButton_Previews: PreviewProvider {
     static var previews: some View {
-        CustomSignInButton(type: .apple, action: {})
+        VStack {
+            CustomSignInButton(type: .apple, action: {})
+                .frame(minHeight: 44, maxHeight: 54)
+
+            CustomSignInButton(type: .google, action: {})
+                .frame(minHeight: 44, maxHeight: 54)
+        }
+        .padding()
+        .background(Color.gray)
     }
 }

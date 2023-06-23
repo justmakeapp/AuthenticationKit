@@ -25,24 +25,57 @@ struct AppleStyle: ButtonStyle {
     }
 
     private var foregroundColor: Color {
-        switch colorScheme {
-        case .dark:
-            return Color.black
-        case .light:
-            return Color.white
-        @unknown default:
-            return Color.black
-        }
+        #if os(iOS)
+            let color = UIColor { trait in
+                switch trait.userInterfaceStyle {
+                case .dark:
+                    return UIColor.black
+
+                case .light:
+                    return UIColor.white
+                case .unspecified:
+                    return UIColor.white
+                @unknown default:
+                    return UIColor.white
+                }
+            }
+            return Color(color)
+        #else
+            switch colorScheme {
+            case .dark:
+                return Color.black
+            case .light:
+                return Color.white
+            @unknown default:
+                return Color.black
+            }
+        #endif
     }
 
     private var bgColor: Color {
-        switch colorScheme {
-        case .dark:
-            return Color.white
-        case .light:
-            return Color.black
-        @unknown default:
-            return Color.white
-        }
+        #if os(iOS)
+            let color = UIColor { trait in
+                switch trait.userInterfaceStyle {
+                case .dark:
+                    return UIColor.white
+                case .light:
+                    return UIColor.black
+                case .unspecified:
+                    return UIColor.black
+                @unknown default:
+                    return UIColor.black
+                }
+            }
+            return Color(color)
+        #else
+            switch colorScheme {
+            case .dark:
+                return Color.white
+            case .light:
+                return Color.black
+            @unknown default:
+                return Color.white
+            }
+        #endif
     }
 }
