@@ -6,8 +6,9 @@ let package = Package(
     name: "AuthKitUI",
     defaultLocalization: "en",
     platforms: [
-        .macCatalyst(.v14),
-        .iOS(.v14)
+        .macCatalyst(.v15),
+        .iOS(.v15),
+        .macOS(.v12)
     ],
     products: [
         .library(
@@ -16,12 +17,12 @@ let package = Package(
         ),
         .library(name: "AuthKit", targets: ["AuthKit"]),
         .library(name: "FirebaseAuthenticationKit", targets: ["FirebaseAuthenticationKit"]),
-//        .library(name: "AmplifyAuthenticationKit", targets: ["AmplifyAuthenticationKit"])
+        .library(name: "AmplifyAuthenticationKit", targets: ["AmplifyAuthenticationKit"])
     ],
     dependencies: [
         .package(name: "GoogleSignIn", url: "https://github.com/google/GoogleSignIn-iOS", from: "6.2.4"),
         .package(url: "https://github.com/firebase/firebase-ios-sdk", from: "10.10.0"),
-//        .package(url: "https://github.com/aws-amplify/amplify-swift", from: "2.2.1"),
+        .package(url: "https://github.com/aws-amplify/amplify-swift", from: "2.11.7"),
         .package(url: "https://github.com/CombineCommunity/CombineExt", from: "1.8.1"),
         .package(path: "../CommonKitUI")
     ],
@@ -48,15 +49,15 @@ let package = Package(
                 .product(name: "FirebaseAuthCombine-Community", package: "firebase-ios-sdk")
             ]
         ),
-//        .target(
-//            name: "AmplifyAuthenticationKit",
-//            dependencies: [
-//                .byName(name: "AuthKit"),
-//                .byName(name: "AuthKitUI"),
-//                .productItem(name: "Amplify", package: "amplify-swift"),
-//                .productItem(name: "AWSCognitoAuthPlugin", package: "amplify-swift"),
-//                .productItem(name: "CombineExt", package: "CombineExt")
-//            ]
-//        )
+        .target(
+            name: "AmplifyAuthenticationKit",
+            dependencies: [
+                .byName(name: "AuthKit"),
+                .byName(name: "AuthKitUI"),
+                .productItem(name: "Amplify", package: "amplify-swift"),
+                .productItem(name: "AWSCognitoAuthPlugin", package: "amplify-swift"),
+                .productItem(name: "CombineExt", package: "CombineExt")
+            ]
+        )
     ]
 )

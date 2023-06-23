@@ -6,7 +6,9 @@
 //
 
 import Combine
-import UIKit
+#if canImport(UIKit)
+    import UIKit
+#endif
 
 public protocol Authenticating {
     func getCurrentUser() -> AuthUser?
@@ -16,8 +18,10 @@ public protocol Authenticating {
     func signIn(with provider: BasicSignInProvider) -> AnyPublisher<AuthResult, Error>
     func signIn(with provider: BasicSignInProvider) async throws -> AuthResult
 
-    func signIn(with provider: OAuthSignInProvider, presentingViewController: UIViewController)
-        -> AnyPublisher<AuthResult, Error>
+    #if canImport(UIKit)
+        func signIn(with provider: OAuthSignInProvider, presentingViewController: UIViewController)
+            -> AnyPublisher<AuthResult, Error>
+    #endif
 
     func signOut() async throws
     func createUser(with email: String, password: String) async throws -> AuthResult
@@ -30,6 +34,9 @@ public protocol Authenticating {
 
     func reauthenticate(with provider: BasicSignInProvider) async throws -> AuthResult
     func reauthenticate(with provider: BasicSignInProvider) -> AnyPublisher<AuthResult, Error>
-    func reauthenticate(with provider: OAuthSignInProvider, presentingViewController: UIViewController)
-        -> AnyPublisher<AuthResult, Error>
+
+    #if canImport(UIKit)
+        func reauthenticate(with provider: OAuthSignInProvider, presentingViewController: UIViewController)
+            -> AnyPublisher<AuthResult, Error>
+    #endif
 }

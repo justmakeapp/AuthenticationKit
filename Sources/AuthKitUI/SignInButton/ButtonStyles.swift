@@ -16,18 +16,33 @@ struct GoogleStyle: ButtonStyle {
 }
 
 struct AppleStyle: ButtonStyle {
+    @Environment(\.colorScheme) private var colorScheme
+
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .foregroundColor(Color(.systemBackground))
-            .background(
-                Color(UIColor { traitCollection in
-                    switch traitCollection.userInterfaceStyle {
-                    case .dark:
-                        return .white
-                    default:
-                        return .black
-                    }
-                })
-            )
+            .foregroundColor(foregroundColor)
+            .background(bgColor)
+    }
+
+    private var foregroundColor: Color {
+        switch colorScheme {
+        case .dark:
+            return Color.black
+        case .light:
+            return Color.white
+        @unknown default:
+            return Color.black
+        }
+    }
+
+    private var bgColor: Color {
+        switch colorScheme {
+        case .dark:
+            return Color.white
+        case .light:
+            return Color.black
+        @unknown default:
+            return Color.white
+        }
     }
 }

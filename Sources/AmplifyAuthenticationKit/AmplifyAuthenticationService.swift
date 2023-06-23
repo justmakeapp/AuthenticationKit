@@ -13,7 +13,6 @@ import AWSCognitoIdentityProvider
 import Combine
 import CombineExt
 import Foundation
-import UIKit
 
 public final class AmplifyAuthenticationService: Authenticating {
     private var currentUser: AmplifyUser?
@@ -25,6 +24,11 @@ public final class AmplifyAuthenticationService: Authenticating {
 
     deinit {
         cancellableSet = []
+    }
+
+    public func userIDToken() async throws -> String? {
+        // TODO: implement this
+        return nil
     }
 
     private func makeAuthUserPublisher() {
@@ -131,58 +135,6 @@ public final class AmplifyAuthenticationService: Authenticating {
         }.eraseToAnyPublisher()
     }
 
-    public func signIn(
-        with provider: OAuthSignInProvider,
-        presentingViewController: UIViewController
-    ) async throws -> AuthResult {
-        guard let currentWindow = await presentingViewController.view.window else {
-            throw NSError(
-                domain: "",
-                code: 1_000,
-                userInfo: [NSLocalizedDescriptionKey: "UI is not ready, cannot signin!"]
-            )
-        }
-
-        let authProvider: AmplifyAuthProvider = {
-            switch provider {
-            case .google:
-                return .google
-            case .apple:
-                return .apple
-            }
-        }()
-
-        _ = try await Amplify.Auth.signInWithWebUI(
-            for: authProvider,
-            presentationAnchor: currentWindow,
-            options: .preferPrivateSession()
-        )
-
-        let user = try await Self.getAmplifyUserFromRemote()
-        return AuthResult(user: user)
-    }
-
-    public func signIn(
-        with provider: OAuthSignInProvider,
-        presentingViewController: UIViewController
-    ) -> AnyPublisher<AuthResult, Error> {
-        return Deferred {
-            Future<AuthResult, Error> { promise in
-                Task {
-                    do {
-                        let result = try await self.signIn(
-                            with: provider,
-                            presentingViewController: presentingViewController
-                        )
-                        promise(.success(result))
-                    } catch {
-                        promise(.failure(error))
-                    }
-                }
-            }
-        }.eraseToAnyPublisher()
-    }
-
     private func signInWithEmailAndPassword(email: String, password: String) async throws -> AuthResult {
         do {
             let option = AWSAuthSignInOptions(authFlowType: .userPassword)
@@ -236,38 +188,6 @@ public final class AmplifyAuthenticationService: Authenticating {
                 Task {
                     do {
                         let result = try await self.signIn(with: provider)
-                        promise(.success(result))
-                    } catch {
-                        promise(.failure(error))
-                    }
-                }
-            }
-        }.eraseToAnyPublisher()
-    }
-
-    public func reauthenticate(
-        with _: OAuthSignInProvider,
-        presentingViewController _: UIViewController
-    ) async throws -> AuthResult? {
-        throw NSError(
-            domain: "",
-            code: 1_000,
-            userInfo: [NSLocalizedDescriptionKey: "Not implemented"]
-        )
-    }
-
-    public func reauthenticate(
-        with provider: OAuthSignInProvider,
-        presentingViewController: UIViewController
-    ) -> AnyPublisher<AuthResult, Error> {
-        return Deferred {
-            Future<AuthResult, Error> { promise in
-                Task {
-                    do {
-                        let result = try await self.signIn(
-                            with: provider,
-                            presentingViewController: presentingViewController
-                        )
                         promise(.success(result))
                     } catch {
                         promise(.failure(error))
