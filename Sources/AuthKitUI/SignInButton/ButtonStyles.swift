@@ -6,7 +6,11 @@
 //
 
 import SwiftUI
-
+#if os(iOS)
+    import UIKit
+#elseif os(macOS)
+    import AppKit
+#endif
 struct GoogleStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
@@ -16,8 +20,6 @@ struct GoogleStyle: ButtonStyle {
 }
 
 struct AppleStyle: ButtonStyle {
-    @Environment(\.colorScheme) private var colorScheme
-
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .foregroundColor(foregroundColor)
@@ -41,14 +43,14 @@ struct AppleStyle: ButtonStyle {
             }
             return Color(color)
         #else
-            switch colorScheme {
-            case .dark:
-                return Color.black
-            case .light:
-                return Color.white
-            @unknown default:
-                return Color.black
+            let color = NSColor(name: nil) { appearance in
+                if appearance.isDarkMode {
+                    return NSColor.black
+                } else {
+                    return NSColor.white
+                }
             }
+            return Color(color)
         #endif
     }
 
@@ -68,14 +70,26 @@ struct AppleStyle: ButtonStyle {
             }
             return Color(color)
         #else
-            switch colorScheme {
-            case .dark:
-                return Color.white
-            case .light:
-                return Color.black
-            @unknown default:
-                return Color.white
+            let color = NSColor(name: nil) { appearance in
+                if appearance.isDarkMode {
+                    return NSColor.white
+                } else {
+                    return NSColor.black
+                }
             }
+            return Color(color)
         #endif
     }
 }
+
+#if os(macOS)
+    private extension NSAppearance {
+        var isDarkMode: Bool {
+            if self.bestMatch(from: [.darkAqua, .aqua]) == .darkAqua {
+                return true
+            } else {
+                return false
+            }
+        }
+    }
+#endif
