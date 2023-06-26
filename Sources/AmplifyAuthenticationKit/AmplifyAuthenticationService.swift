@@ -15,11 +15,13 @@ import CombineExt
 import Foundation
 
 public final class AmplifyAuthenticationService: Authenticating {
-    private var currentUser: AmplifyUser?
+    private var currentUserSubject: CurrentValueSubject<AuthKit.AuthUser?, Never> = .init(nil)
     private var cancellableSet: Set<AnyCancellable> = []
 
     public init() {
-        makeAuthUserPublisher()
+        addUserDidChangeListener { [weak self] user in
+            self?.currentUserSubject.send(user)
+        }
     }
 
     deinit {
@@ -31,52 +33,8 @@ public final class AmplifyAuthenticationService: Authenticating {
         return nil
     }
 
-    private func makeAuthUserPublisher() {
-        Amplify.Hub.publisher(for: .auth)
-            .filter { payload -> Bool in
-                switch payload.eventName {
-                case HubPayload.EventName.Auth.signedIn,
-                     HubPayload.EventName.Auth.federateToIdentityPoolAPI,
-                     HubPayload.EventName.Auth.clearedFederationToIdentityPoolAPI,
-                     HubPayload.EventName.Auth.sessionExpired,
-                     HubPayload.EventName.Auth.signedOut,
-                     HubPayload.EventName.Auth.userDeleted:
-                    return true
-                default:
-                    return false
-                }
-            }
-            .flatMapLatest { payload -> AnyPublisher<AmplifyUser?, Never> in
-                switch payload.eventName {
-                case HubPayload.EventName.Auth.signedIn,
-                     HubPayload.EventName.Auth.federateToIdentityPoolAPI:
-                    return Deferred {
-                        Future { promise in
-                            Task {
-                                let user = try? await Self.getAmplifyUserFromRemote()
-                                promise(.success(user))
-                            }
-                        }
-                    }
-                    .eraseToAnyPublisher()
-
-                case HubPayload.EventName.Auth.sessionExpired,
-                     HubPayload.EventName.Auth.signedOut,
-                     HubPayload.EventName.Auth.userDeleted,
-                     HubPayload.EventName.Auth.clearedFederationToIdentityPoolAPI:
-                    return Just(nil).eraseToAnyPublisher()
-
-                default:
-                    // This branch should never be executed
-                    return Just(nil).eraseToAnyPublisher()
-                }
-            }
-            .assign(to: \.currentUser, on: self, ownership: .weak)
-            .store(in: &cancellableSet)
-    }
-
     public func getCurrentUser() -> AuthKit.AuthUser? {
-        return currentUser
+        return currentUserSubject.value
     }
 
     public func addUserDidChangeListener(_ completion: @escaping (AuthKit.AuthUser?) -> Void) {
@@ -135,6 +93,29 @@ public final class AmplifyAuthenticationService: Authenticating {
         }.eraseToAnyPublisher()
     }
 
+    public func signIn(with provider: OAuthSignInProvider) async throws -> AuthResult {
+        let signInResult: AuthSignInResult = try await Amplify.Auth.signInWithWebUI(for: {
+            switch provider {
+            case .google:
+                return .google
+            case .apple:
+                return .apple
+            }
+        }())
+
+        guard signInResult.isSignedIn else {
+            throw NSError(
+                domain: "AmplifyAuthenticationKit",
+                code: 1_000,
+                userInfo: [NSLocalizedDescriptionKey: "isSignedIn is false"]
+            )
+        }
+
+        let user = try await Self.getAmplifyUserFromRemote()
+        let result = AuthResult(user: user)
+        return result
+    }
+
     private func signInWithEmailAndPassword(email: String, password: String) async throws -> AuthResult {
         do {
             let option = AWSAuthSignInOptions(authFlowType: .userPassword)
@@ -167,7 +148,7 @@ public final class AmplifyAuthenticationService: Authenticating {
 
         switch signOutResult {
         case .complete, .partial:
-            currentUser = nil
+            currentUserSubject.send(nil)
             return
         case let .failed(error):
             throw error
@@ -255,7 +236,7 @@ public final class AmplifyAuthenticationService: Authenticating {
         return []
     }
 
-    static func getAmplifyUserFromRemote() async throws -> AmplifyUser {
+    static func getAmplifyUserFromRemote() async throws -> AuthKit.AuthUser {
         async let attributesAsync = try Amplify.Auth.fetchUserAttributes()
         async let currentUserAsync = try Amplify.Auth.getCurrentUser()
 
@@ -286,5 +267,11 @@ public final class AmplifyAuthenticationService: Authenticating {
         )
         print("Amplify user: ", user)
         return user
+    }
+}
+
+extension AmplifyAuthenticationService: AuthDataProvider {
+    public func authStateDidChangePublisher() -> AnyPublisher<AuthKit.AuthUser?, Never> {
+        return currentUserSubject.share(replay: 1).eraseToAnyPublisher()
     }
 }

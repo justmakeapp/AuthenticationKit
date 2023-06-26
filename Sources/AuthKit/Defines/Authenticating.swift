@@ -22,6 +22,7 @@ public protocol Authenticating {
         func signIn(with provider: OAuthSignInProvider, presentingViewController: UIViewController)
             -> AnyPublisher<AuthResult, Error>
     #endif
+    func signIn(with provider: OAuthSignInProvider) async throws -> AuthResult
 
     func signOut() async throws
     func createUser(with email: String, password: String) async throws -> AuthResult
@@ -39,4 +40,17 @@ public protocol Authenticating {
         func reauthenticate(with provider: OAuthSignInProvider, presentingViewController: UIViewController)
             -> AnyPublisher<AuthResult, Error>
     #endif
+}
+
+public extension Authenticating {
+    func sendEmailVeritification() async throws {}
+    func unlink(from _: String) async throws -> AuthUser? {
+        return nil
+    }
+
+    func link(_: LinkMethod) async throws -> AuthResult? {
+        return nil
+    }
+
+    func deleteUser() async throws {}
 }
