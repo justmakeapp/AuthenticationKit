@@ -1,4 +1,4 @@
-// swift-tools-version:5.5
+// swift-tools-version:5.8
 
 import PackageDescription
 
@@ -20,11 +20,14 @@ let package = Package(
 //        .library(name: "AmplifyAuthenticationKit", targets: ["AmplifyAuthenticationKit"])
     ],
     dependencies: [
-        .package(name: "GoogleSignIn", url: "https://github.com/google/GoogleSignIn-iOS", from: "7.0.0"),
-        .package(url: "https://github.com/firebase/firebase-ios-sdk", from: "10.10.0"),
-//        .package(url: "https://github.com/aws-amplify/amplify-swift", from: "2.11.7"),
-//        .package(url: "https://github.com/CombineCommunity/CombineExt", from: "1.8.1"),
-        .package(path: "../CommonKitUI")
+        .package(url: "https://github.com/google/GoogleSignIn-iOS", exact: "7.0.0"),
+        .package(url: "https://github.com/firebase/firebase-ios-sdk", exact: "10.12.0"),
+//        .package(url: "https://github.com/aws-amplify/amplify-swift", exact: "2.11.7"),
+//        .package(url: "https://github.com/CombineCommunity/CombineExt", exact: "1.8.1"),
+        .package(path: "../CommonKitUI"),
+        .package(path: "../FoundationX"),
+        .package(url: "https://github.com/mhdhejazi/Dynamic.git", exact: "1.2.0"),
+        .package(url: "https://github.com/SwiftUIX/SwiftUIX", exact: "0.1.6")
     ],
     targets: [
         .target(
@@ -34,10 +37,13 @@ let package = Package(
         .target(
             name: "AuthKitUI",
             dependencies: [
-                .product(name: "GoogleSignIn", package: "GoogleSignIn"),
-                .byName(name: "AuthKit"),
+                .product(name: "GoogleSignIn", package: "GoogleSignIn-iOS"),
                 .product(name: "SwiftUIExtension", package: "CommonKitUI"),
-                .product(name: "ViewComponent", package: "CommonKitUI")
+                .product(name: "ViewComponent", package: "CommonKitUI"),
+                "FoundationX",
+                "AuthKit",
+                "Dynamic",
+                "SwiftUIX"
             ]
         ),
         .target(

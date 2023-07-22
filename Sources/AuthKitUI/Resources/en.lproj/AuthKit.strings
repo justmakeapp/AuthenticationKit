@@ -1,1 +1,31 @@
+"action.continue" = "Continue";
 "action.signInWith" = "Sign in with %@";
+"action.signIn" = "Sign in";
+"action.signUp" = "Sign Up";
+"action.signInToApp" = "Sign in to %@";
+"action.register" = "Register";
+"action.registerWithEmail" = "Register with email";
+"action.forgotPassword" = "Forgot password?";
+"action.resetPassword" = "Reset password";
+
+"error.emailNotValid" = "Email is not valid.";
+"error.passwordMustHaveAtLeast" = "Password must have at least %d characters.";
+
+"message.passwordResetLinkWasSent" = "The password reset was successfully sent";
+"message.checkMailForLink" = "Please check your email for the verification link";
+"message.appExtensionRequireAuth" = "Open %@ and sign in to share.";
+
+"email" = "Email";
+"password" = "Password";
+"or" = "or";
+
+"signIn.welcomeTo" = "Welcome to %@";
+"signIn.dontHaveAnAccount" = "Don't have an account?";
+"signIn.forgotYourPassword" = "Forgot your password?";
+
+"signUp.bySelectingSignUpBelowIAgreeTo" = "By selecting Sign Up below, I agree to ";
+
+"termAndConditions" = "Term and Conditions";
+"privacyPolicy" = "Privacy Policy";
+
+"and" = "and";
