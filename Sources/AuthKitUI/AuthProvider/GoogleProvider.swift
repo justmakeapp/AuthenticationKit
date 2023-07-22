@@ -28,8 +28,7 @@ public struct GoogleAuthResult {
                     return nil
                 }
 
-                let authentication = user.authentication
-                guard let idToken = authentication.idToken else {
+                guard let idToken = user.idToken?.tokenString else {
                     return nil
                 }
 
@@ -45,27 +44,28 @@ public struct GoogleAuthResult {
                     )
                 }()
 
-                return GoogleAuthResult(idToken: idToken, accessToken: authentication.accessToken, user: socialUser)
+                return GoogleAuthResult(
+                    idToken: idToken,
+                    accessToken: user.accessToken.tokenString,
+                    user: socialUser
+                )
             }
             .eraseToAnyPublisher()
         }
 
         private static func requestGoogleAuthentication(
-            clientID: String,
+            clientID _: String,
             presentingViewController: UIViewController
         ) -> AnyPublisher<GIDGoogleUser?, Error> {
             let gidInstance = GIDSignIn.sharedInstance
             return Deferred {
                 Future<GIDGoogleUser?, Error> { promise in
-                    gidInstance.signIn(
-                        with: .init(clientID: clientID),
-                        presenting: presentingViewController
-                    ) { userOptional, error in
+                    gidInstance.signIn(withPresenting: presentingViewController) { result, error in
                         if let error {
                             promise(.failure(error))
                             return
                         }
-                        promise(.success(userOptional))
+                        promise(.success(result?.user))
                     }
                 }
             }
