@@ -1,15 +1,12 @@
 //
-//  File.swift
+//  AuthResult.swift
 //
 //
 //  Created by Bình Nguyễn Thanh on 06/01/2023.
 //
 
+import AuthenticationServices
 import Foundation
-
-#if os(iOS)
-    import AuthenticationServices
-#endif
 
 public struct SocialSignInUser {
     public let email: String
@@ -27,10 +24,7 @@ public struct SocialSignInUser {
 }
 
 public enum ProviderLoginInfo {
-    #if os(iOS)
-        case apple(authorization: ASAuthorization)
-    #endif
-
+    case apple(authorization: ASAuthorization)
     case google(googleUser: SocialSignInUser?)
 }
 

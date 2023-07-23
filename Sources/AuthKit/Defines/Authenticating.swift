@@ -6,8 +6,17 @@
 //
 
 import Combine
+
 #if canImport(UIKit)
     import UIKit
+
+    public typealias PlatformPresentingView = UIViewController
+#endif
+
+#if canImport(AppKit)
+    import AppKit.NSWindow
+
+    public typealias PlatformPresentingView = NSWindow
 #endif
 
 public protocol Authenticating {
@@ -18,11 +27,15 @@ public protocol Authenticating {
     func signIn(with provider: BasicSignInProvider) -> AnyPublisher<AuthResult, Error>
     func signIn(with provider: BasicSignInProvider) async throws -> AuthResult
 
-    #if canImport(UIKit)
-        func signIn(with provider: OAuthSignInProvider, presentingViewController: UIViewController)
-            -> AnyPublisher<AuthResult, Error>
-    #endif
+    func signIn(
+        with provider: OAuthSignInProvider,
+        presentingView: PlatformPresentingView
+    ) -> AnyPublisher<AuthResult, Error>
     func signIn(with provider: OAuthSignInProvider) async throws -> AuthResult
+    func signIn(
+        with provider: OAuthSignInProvider,
+        presentingView: PlatformPresentingView
+    ) async throws -> AuthResult
 
     func signOut() async throws
     func createUser(with email: String, password: String) async throws -> AuthResult
@@ -35,11 +48,10 @@ public protocol Authenticating {
 
     func reauthenticate(with provider: BasicSignInProvider) async throws -> AuthResult
     func reauthenticate(with provider: BasicSignInProvider) -> AnyPublisher<AuthResult, Error>
-
-    #if canImport(UIKit)
-        func reauthenticate(with provider: OAuthSignInProvider, presentingViewController: UIViewController)
-            -> AnyPublisher<AuthResult, Error>
-    #endif
+    func reauthenticate(
+        with provider: OAuthSignInProvider,
+        presentingView: PlatformPresentingView
+    ) -> AnyPublisher<AuthResult, Error>
 }
 
 public extension Authenticating {
@@ -53,4 +65,40 @@ public extension Authenticating {
     }
 
     func deleteUser() async throws {}
+
+    @MainActor
+    func signIn(with provider: OAuthSignInProvider) async throws -> AuthResult {
+        guard let presentingView = Self.getPresentingView() else {
+            throw NSError(
+                domain: String(describing: Authenticating.self),
+                code: 1_000,
+                userInfo: [NSLocalizedDescriptionKey: "Not found presenting view"]
+            )
+        }
+        return try await signIn(with: provider, presentingView: presentingView)
+    }
+
+    @MainActor
+    private static func getPresentingView() -> PlatformPresentingView? {
+        #if os(iOS)
+            let keyWindow: UIWindow? = UIApplication.shared.windows.first(where: { $0.isKeyWindow })
+            guard var topController = keyWindow?.rootViewController else {
+                return nil
+            }
+
+            while let presentedViewController = topController.presentedViewController {
+                topController = presentedViewController
+            }
+
+            return topController
+        #endif
+
+        #if os(macOS)
+            guard let presentingWindow = NSApplication.shared.windows.first else {
+                return nil
+            }
+
+            return presentingWindow
+        #endif
+    }
 }

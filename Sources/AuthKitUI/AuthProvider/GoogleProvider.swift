@@ -11,65 +11,80 @@ public struct GoogleAuthResult {
     public let user: SocialSignInUser?
 }
 
-#if canImport(UIKit)
-    import UIKit.UIViewController
+public enum GoogleProvider {
+    public static func getCredential(
+        presentingView: PlatformPresentingView
+    ) async throws -> GoogleAuthResult {
+        let user = try await requestGoogleAuthentication(presentingView: presentingView)
 
-    public enum GoogleProvider {
-        public static func getCredential(
-            clientID: String,
-            presentingViewController: UIViewController
-        ) -> AnyPublisher<GoogleAuthResult, Error> {
-            requestGoogleAuthentication(
-                clientID: clientID,
-                presentingViewController: presentingViewController
-            )
+        guard let result = Self.makeGoogleAuthResult(from: user) else {
+            throw "Can not make google auth result"
+        }
+
+        return result
+    }
+
+    public static func getCredential(
+        presentingView: PlatformPresentingView
+    ) -> AnyPublisher<GoogleAuthResult, Error> {
+        requestGoogleAuthentication(presentingView: presentingView)
             .compactMap { user -> GoogleAuthResult? in
                 guard let user else {
                     return nil
                 }
 
-                guard let idToken = user.idToken?.tokenString else {
-                    return nil
-                }
-
-                let socialUser: SocialSignInUser? = {
-                    guard let profile = user.profile else {
-                        return nil
-                    }
-                    return SocialSignInUser(
-                        email: profile.email,
-                        fullName: profile.name,
-                        givenName: profile.givenName,
-                        familyName: profile.familyName
-                    )
-                }()
-
-                return GoogleAuthResult(
-                    idToken: idToken,
-                    accessToken: user.accessToken.tokenString,
-                    user: socialUser
-                )
+                return Self.makeGoogleAuthResult(from: user)
             }
             .eraseToAnyPublisher()
-        }
-
-        private static func requestGoogleAuthentication(
-            clientID _: String,
-            presentingViewController: UIViewController
-        ) -> AnyPublisher<GIDGoogleUser?, Error> {
-            let gidInstance = GIDSignIn.sharedInstance
-            return Deferred {
-                Future<GIDGoogleUser?, Error> { promise in
-                    gidInstance.signIn(withPresenting: presentingViewController) { result, error in
-                        if let error {
-                            promise(.failure(error))
-                            return
-                        }
-                        promise(.success(result?.user))
-                    }
-                }
-            }
-            .eraseToAnyPublisher()
-        }
     }
-#endif
+
+    private static func makeGoogleAuthResult(from user: GIDGoogleUser) -> GoogleAuthResult? {
+        guard let idToken = user.idToken?.tokenString else {
+            return nil
+        }
+
+        let socialUser: SocialSignInUser? = {
+            guard let profile = user.profile else {
+                return nil
+            }
+            return SocialSignInUser(
+                email: profile.email,
+                fullName: profile.name,
+                givenName: profile.givenName,
+                familyName: profile.familyName
+            )
+        }()
+
+        return GoogleAuthResult(
+            idToken: idToken,
+            accessToken: user.accessToken.tokenString,
+            user: socialUser
+        )
+    }
+
+    private static func requestGoogleAuthentication(
+        presentingView: PlatformPresentingView
+    ) async throws -> GIDGoogleUser {
+        let gidInstance = GIDSignIn.sharedInstance
+        let result = try await gidInstance.signIn(withPresenting: presentingView)
+        return result.user
+    }
+
+    private static func requestGoogleAuthentication(
+        presentingView: PlatformPresentingView
+    ) -> AnyPublisher<GIDGoogleUser?, Error> {
+        let gidInstance = GIDSignIn.sharedInstance
+        return Deferred {
+            Future<GIDGoogleUser?, Error> { promise in
+                gidInstance.signIn(withPresenting: presentingView) { result, error in
+                    if let error {
+                        promise(.failure(error))
+                        return
+                    }
+                    promise(.success(result?.user))
+                }
+            }
+        }
+        .eraseToAnyPublisher()
+    }
+}

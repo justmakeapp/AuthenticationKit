@@ -58,10 +58,6 @@ public struct FirebaseAuthenticationService: Authenticating {
         return AuthResult(from: authResult)
     }
 
-    public func signIn(with _: OAuthSignInProvider) async throws -> AuthResult {
-        fatalError()
-    }
-
     public func signOut() async throws {
         try auth.signOut()
     }
