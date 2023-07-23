@@ -63,7 +63,7 @@ public struct AuthView: View {
                 .padding(.top, 66.scaledToMac())
 
             OAuthSignInView { authProvider in
-                print(authProvider)
+                config.onOauthSignIn(authProvider)
             }
 
             Text(L10n.or)
@@ -391,6 +391,7 @@ public extension AuthView {
         var onClose: () -> Void = {}
         var onForgotPassword: () -> Void = {}
         var onSignIn: () -> Void = {}
+        var onOauthSignIn: (_ authProvider: OAuthSignInProvider) -> Void = { _ in }
         var onSignUp: () -> Void = {}
         #if DEBUG
             var onContinueAsGuest: () -> Void = {}
@@ -411,6 +412,10 @@ public extension AuthView {
 
     func onSignIn(_ value: @escaping () -> Void) -> Self {
         then { $0.config.onSignIn = value }
+    }
+
+    func onOauthSignIn(_ value: @escaping (_ authProvider: OAuthSignInProvider) -> Void) -> Self {
+        then { $0.config.onOauthSignIn = value }
     }
 
     func onSignUp(_ value: @escaping () -> Void) -> Self {
