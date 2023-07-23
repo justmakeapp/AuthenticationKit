@@ -7,6 +7,7 @@
 
 import SwiftUI
 import ViewComponent
+import AuthKitL10n
 
 public struct SignUpView: View {
     #if os(iOS)

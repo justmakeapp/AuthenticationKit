@@ -1,0 +1,32 @@
+"action.continue" = "続行";
+"action.signInWith" = "%@ でサインインする";
+"action.signIn" = "サインイン";
+"action.signUp" = "新規登録";
+"action.signInToApp" = "%@ にサインイン";
+"action.register" = "レジスタ";
+"action.registerWithEmail" = "メールで登録";
+"action.forgotPassword" = "パスワードをお忘れですか?";
+"action.resetPassword" = "パスワードをリセット";
+
+"error.emailNotValid" = "Emailは有効ではありません";
+"error.passwordMustHaveAtLeast" = "パスワードは少なくとも %d文字が必要です。";
+
+"message.passwordResetLinkWasSent" = "The password reset was successfully sent";
+"message.checkMailForLink" = "Please check your email for the verification link";
+"message.appExtensionRequireAuth" = "%@ を開き、サインインして共有します。";
+
+"name" = "名前";
+"email" = "メール";
+"password" = "パスワード";
+"or" = "または";
+
+"signIn.welcomeTo" = "%@ へようこそ";
+"signIn.dontHaveAnAccount" = "アカウントをお持ちではありませんか？";
+"signIn.forgotYourPassword" = "パスワードをお忘れですか？";
+
+"signUp.bySelectingSignUpBelowIAgreeTo" = "以下でサインアップを選択することで、以下に同意します ";
+
+"termAndConditions" = "利用条件";
+"privacyPolicy" = "プライバシーポリシー";
+
+"and" = "および";

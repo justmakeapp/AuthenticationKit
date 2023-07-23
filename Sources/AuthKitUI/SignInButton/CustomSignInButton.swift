@@ -3,6 +3,7 @@
 import SwiftUI
 import SwiftUIExtension
 import ViewComponent
+import AuthKitL10n
 
 public struct CustomSignInButton: View {
     private struct Configuration {

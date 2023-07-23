@@ -1,0 +1,32 @@
+"action.continue" = "Tiếp tục";
+"action.signInWith" = "Đăng nhập bằng %@";
+"action.signIn" = "Đăng nhập";
+"action.signUp" = "Đăng ký";
+"action.signInToApp" = "Đăng nhập vào %@";
+"action.register" = "Đăng ký";
+"action.registerWithEmail" = "Đăng ký với email";
+"action.forgotPassword" = "Quên mật khẩu?";
+"action.resetPassword" = "Đặt lại mật khẩu";
+
+"error.emailNotValid" = "Email không hợp lệ.";
+"error.passwordMustHaveAtLeast" = "Mật khẩu phải có ít nhất %d ký tự";
+
+"message.passwordResetLinkWasSent" = "Mật khẩu đã được khởi tạo lại thành công";
+"message.checkMailForLink" = "Xin vui lòng kiểm tra email của bạn để hoàn thành đăng nhập";
+"message.appExtensionRequireAuth" = "Mở %@ và đăng nhập để chia sẻ.";
+
+"name" = "Tên";
+"email" = "Email";
+"password" = "Mật khẩu";
+"or" = "hoặc";
+
+"signIn.welcomeTo" = "Chào mừng đến với %@";
+"signIn.dontHaveAnAccount" = "Chưa có tài khoản?";
+"signIn.forgotYourPassword" = "Quên mật khẩu?";
+
+"signUp.bySelectingSignUpBelowIAgreeTo" = "Bằng cách bấm vào nút Đăng ký bên dưới, tôi đồng ý với ";
+
+"termAndConditions" = "Các điều khoản và điều kiện";
+"privacyPolicy" = "Chính sách quyền riêng tư";
+
+"and" = "và";

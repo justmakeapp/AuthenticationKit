@@ -6,6 +6,7 @@
 //
 
 import AuthKit
+import AuthKitL10n
 import FoundationX
 import SwiftUI
 import SwiftUIExtension

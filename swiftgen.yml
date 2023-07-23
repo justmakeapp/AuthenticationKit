@@ -9,12 +9,12 @@
 ##   SwiftGen will parse all `.strings` files found in that folder.
 strings:
     inputs:
-        - Sources/AuthKitUI/Resources/en.lproj
+        - Sources/AuthKitL10n/Resources/en.lproj
     outputs:
         - templateName: structured-swift5
           params:
               publicAccess: true
-          output: Sources/AuthKitUI/L10n.swift
+          output: Sources/AuthKitL10n/L10n.swift
 
 ## Generate constants for your Assets Catalogs, including constants for images, colors, ARKit resources, etc.
 ##   This example also shows how to provide additional parameters to your template to customize the output.

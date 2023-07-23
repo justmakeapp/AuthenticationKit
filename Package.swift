@@ -16,6 +16,7 @@ let package = Package(
             targets: ["AuthKitUI"]
         ),
         .library(name: "AuthKit", targets: ["AuthKit"]),
+        .library(name: "AuthKitL10n", targets: ["AuthKitL10n"]),
         .library(name: "FirebaseAuthenticationKit", targets: ["FirebaseAuthenticationKit"]),
 //        .library(name: "AmplifyAuthenticationKit", targets: ["AmplifyAuthenticationKit"])
     ],
@@ -35,6 +36,10 @@ let package = Package(
             dependencies: []
         ),
         .target(
+            name: "AuthKitL10n",
+            dependencies: []
+        ),
+        .target(
             name: "AuthKitUI",
             dependencies: [
                 .product(name: "GoogleSignIn", package: "GoogleSignIn-iOS"),
@@ -42,8 +47,9 @@ let package = Package(
                 .product(name: "ViewComponent", package: "CommonKitUI"),
                 "FoundationX",
                 "AuthKit",
+                "AuthKitL10n",
                 "Dynamic",
-                "SwiftUIX"
+                "SwiftUIX",
             ]
         ),
         .target(
