@@ -16,8 +16,8 @@ public struct AuthView: View {
         @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     #endif
 
-    @State private var email: String
-    @State private var password: String = ""
+    @Binding private var email: String
+    @Binding private var password: String
 
     @State private var isContinueButtonPressed = false
     @State private var isSignInButtonPressed = false
@@ -33,8 +33,12 @@ public struct AuthView: View {
 
     private var config = Config()
 
-    public init(email: String) {
-        _email = .init(initialValue: email)
+    public init(
+        email: Binding<String>,
+        password: Binding<String>
+    ) {
+        _email = email
+        _password = password
     }
 
     public var body: some View {
@@ -49,7 +53,7 @@ public struct AuthView: View {
             ScrollView {
                 scrollContentView
             }
-            buildCatalystView {
+            buildMacView {
                 if config.mode == .reauthenticate {
                     closeButton
                 }
@@ -101,35 +105,41 @@ public struct AuthView: View {
 
     // MARK: - Email
 
+    public static func validateEmail(_ email: String) -> Bool {
+        let detector = try? NSDataDetector(
+            types: NSTextCheckingResult.CheckingType.link.rawValue
+        )
+
+        let range = NSRange(
+            email.startIndex ..< email.endIndex,
+            in: email
+        )
+
+        let matches = detector?.matches(
+            in: email,
+            options: [],
+            range: range
+        )
+
+        // We only want our string to contain a single email
+        // address, so if multiple matches were found, then
+        // we fail our validation process and return nil:
+        guard let match = matches?.first, matches?.count == 1 else {
+            return false
+        }
+
+        // Verify that the found link points to an email address,
+        // and that its range covers the whole input string:
+        guard match.url?.scheme == "mailto", match.range == range else {
+            return false
+        }
+
+        return true
+    }
+
     private var emailIsValid: Bool {
         if isContinueButtonPressed || !email.isEmpty {
-            let detector = try? NSDataDetector(
-                types: NSTextCheckingResult.CheckingType.link.rawValue
-            )
-
-            let range = NSRange(
-                email.startIndex ..< email.endIndex,
-                in: email
-            )
-
-            let matches = detector?.matches(
-                in: email,
-                options: [],
-                range: range
-            )
-
-            // We only want our string to contain a single email
-            // address, so if multiple matches were found, then
-            // we fail our validation process and return nil:
-            guard let match = matches?.first, matches?.count == 1 else {
-                return false
-            }
-
-            // Verify that the found link points to an email address,
-            // and that its range covers the whole input string:
-            guard match.url?.scheme == "mailto", match.range == range else {
-                return false
-            }
+            return Self.validateEmail(email)
         }
         return true
     }
@@ -161,11 +171,15 @@ public struct AuthView: View {
 
     // MARK: - Password
 
+    public static func validatePassword(_ password: String) -> Bool {
+        let passwordPattern = #"(?=.{6,})"# // At least 6 characters
+
+        return password ~= passwordPattern
+    }
+
     private var isPasswordValid: Bool {
         if isSignInButtonPressed || !password.isEmpty {
-            let passwordPattern = #"(?=.{6,})"# // At least 6 characters
-
-            return password ~= passwordPattern
+            return AuthView.validatePassword(password)
         } else {
             return true
         }
@@ -429,39 +443,13 @@ public extension AuthView {
     #endif
 }
 
-// MARK: - Private Extension
-
-private extension View {
-    func textFieldStyling() -> some View {
-        font(.body)
-        #if os(macOS)
-            .textFieldStyle(.roundedBorder)
-        #endif
-        #if os(iOS)
-        .padding(.horizontal, 12)
-        .frame(height: 44.scaledToMac())
-        .frame(maxWidth: .infinity)
-        .overlay {
-            RoundedRectangle(cornerRadius: 10.onMac(7))
-                .stroke(Color(.separator), lineWidth: 1)
-        }
-        #endif
-    }
-}
-
-private extension String {
-    static func ~= (lhs: String, rhs: String) -> Bool {
-        guard let regex = try? NSRegularExpression(pattern: rhs) else { return false }
-        let range = NSRange(location: 0, length: lhs.utf16.count)
-        return regex.firstMatch(in: lhs, options: [], range: range) != nil
-    }
-}
-
 // MARK: - Previews
 
 struct AuthView_Previews: PreviewProvider {
+    @State private static var email = "longvudai@email.com"
+    @State private static var password = ""
     static var previews: some View {
-        AuthView(email: "longvudai@email.com")
+        AuthView(email: $email, password: $password)
             .appName("My App")
     }
 }

@@ -14,6 +14,8 @@ public enum L10n {
     public static let and = L10n.tr("AuthKit", "and", fallback: "and")
     /// Email
     public static let email = L10n.tr("AuthKit", "email", fallback: "Email")
+    /// Name
+    public static let name = L10n.tr("AuthKit", "name", fallback: "Name")
     /// or
     public static let or = L10n.tr("AuthKit", "or", fallback: "or")
     /// Password

@@ -15,6 +15,7 @@
 "message.checkMailForLink" = "Please check your email for the verification link";
 "message.appExtensionRequireAuth" = "Open %@ and sign in to share.";
 
+"name" = "Name";
 "email" = "Email";
 "password" = "Password";
 "or" = "or";
