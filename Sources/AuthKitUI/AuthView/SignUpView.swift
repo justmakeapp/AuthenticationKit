@@ -5,9 +5,9 @@
 //  Created by Long Vu on 23/07/2023.
 //
 
+import AuthKitL10n
 import SwiftUI
 import ViewComponent
-import AuthKitL10n
 
 public struct SignUpView: View {
     #if os(iOS)

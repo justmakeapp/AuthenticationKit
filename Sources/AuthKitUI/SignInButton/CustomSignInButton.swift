@@ -1,9 +1,9 @@
 // Created 06/02/2022
 
+import AuthKitL10n
 import SwiftUI
 import SwiftUIExtension
 import ViewComponent
-import AuthKitL10n
 
 public struct CustomSignInButton: View {
     private struct Configuration {
