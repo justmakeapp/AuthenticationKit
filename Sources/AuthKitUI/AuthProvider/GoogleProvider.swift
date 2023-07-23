@@ -12,6 +12,7 @@ public struct GoogleAuthResult {
 }
 
 public enum GoogleProvider {
+    @MainActor
     public static func getCredential(
         presentingView: PlatformPresentingView
     ) async throws -> GoogleAuthResult {
@@ -62,6 +63,7 @@ public enum GoogleProvider {
         )
     }
 
+    @MainActor
     private static func requestGoogleAuthentication(
         presentingView: PlatformPresentingView
     ) async throws -> GIDGoogleUser {
