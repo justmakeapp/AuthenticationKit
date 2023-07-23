@@ -32,14 +32,21 @@ public struct AuthView: View {
         #endif
     }
 
-    private var config = Config()
+    private var config: Config
 
     public init(
         email: Binding<String>,
         password: Binding<String>
     ) {
+        config = .init(enabledPasswordBasedMethod: true)
         _email = email
         _password = password
+    }
+
+    public init() {
+        config = .init(enabledPasswordBasedMethod: false)
+        _email = .constant("")
+        _password = .constant("")
     }
 
     public var body: some View {
@@ -71,6 +78,26 @@ public struct AuthView: View {
                 config.onOauthSignIn(authProvider)
             }
 
+            if config.enabledPasswordBasedMethod {
+                passwordBasedView
+            } else {
+                #if DEBUG
+                    ZStack {
+                        continueAsGuestButton
+                    }
+                    .padding(.vertical)
+
+                #endif
+            }
+
+            Spacer()
+        }
+        .padding(.horizontal, 16)
+        .frame(maxWidth: isCompact ? .infinity : 400.onMac(300))
+    }
+
+    private var passwordBasedView: some View {
+        VStack(spacing: 0) {
             Text(L10n.or)
                 .font(.body)
                 .foregroundColor(.secondary)
@@ -97,11 +124,7 @@ public struct AuthView: View {
             }
             .transition(.fade)
             .animation(.linear, value: inputState)
-
-            Spacer()
         }
-        .padding(.horizontal, 16)
-        .frame(maxWidth: isCompact ? .infinity : 400.onMac(300))
     }
 
     // MARK: - Email
@@ -400,6 +423,7 @@ public extension AuthView {
     }
 
     struct Config {
+        var enabledPasswordBasedMethod: Bool
         var appName: String = ""
         var cornerRadius: CGFloat = 10.onMac(7)
         var mode: Mode = .signIn
