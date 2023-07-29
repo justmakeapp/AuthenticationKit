@@ -109,14 +109,6 @@ public extension FirebaseAuthenticationService {
     ) async throws -> (AuthCredential, ProviderLoginInfo) {
         switch provider {
         case .google:
-//                guard let clientID = FirebaseApp.app()?.options.clientID else {
-//                    let error = NSError(
-//                        domain: "",
-//                        code: 1_000,
-//                        userInfo: [NSLocalizedDescriptionKey: "Can not authenticate with Google"]
-//                    )
-//                    return Fail(error: error).eraseToAnyPublisher()
-//                }
             let googleAuthResult = try await GoogleProvider.getCredential(
                 presentingView: presentingView
             )
@@ -128,28 +120,26 @@ public extension FirebaseAuthenticationService {
             return (credential, .google(googleUser: googleAuthResult.user))
 
         case .apple:
-            fatalError()
-//                let provider = AppleProvider()
-//                return provider.startSignInWithAppleFlow()
-//                    .tryMap {
-//                        guard let result = provider.makeAuthCredential(from: $0) else {
-//                            let error = NSError(
-//                                domain: "",
-//                                code: 1_000,
-//                                userInfo: [NSLocalizedDescriptionKey: "Can not authenticate with Apple"]
-//                            )
-//                            throw error
-//                        }
-//
-//                        let credential = OAuthProvider.credential(
-//                            withProviderID: "apple.com",
-//                            idToken: result.idToken,
-//                            rawNonce: result.nonce
-//                        )
-//
-//                        return (credential, .apple(authorization: $0))
-//                    }
-//                    .eraseToAnyPublisher()
+
+            let provider = AppleProvider()
+            let authorization = try await provider.startSignInWithAppleFlow()
+
+            guard let result = provider.makeAuthCredential(from: authorization) else {
+                let error = NSError(
+                    domain: "",
+                    code: 1_000,
+                    userInfo: [NSLocalizedDescriptionKey: "Can not authenticate with Apple"]
+                )
+                throw error
+            }
+
+            let credential = OAuthProvider.credential(
+                withProviderID: "apple.com",
+                idToken: result.idToken,
+                rawNonce: result.nonce
+            )
+
+            return (credential, .apple(authorization: authorization))
         }
     }
 
@@ -159,14 +149,6 @@ public extension FirebaseAuthenticationService {
     ) -> AnyPublisher<(AuthCredential, ProviderLoginInfo), Error> {
         switch provider {
         case .google:
-//                guard let clientID = FirebaseApp.app()?.options.clientID else {
-//                    let error = NSError(
-//                        domain: "",
-//                        code: 1_000,
-//                        userInfo: [NSLocalizedDescriptionKey: "Can not authenticate with Google"]
-//                    )
-//                    return Fail(error: error).eraseToAnyPublisher()
-//                }
             return GoogleProvider.getCredential(
                 presentingView: presentingView
             )

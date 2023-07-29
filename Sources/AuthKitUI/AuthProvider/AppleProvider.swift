@@ -19,6 +19,39 @@ public class AppleProvider: NSObject {
     // Unhashed nonce.
     private var currentUnhashedNonce: String?
 
+    private var startSignInWithAppleFlowContinuation: UnsafeContinuation<ASAuthorization, Error>?
+
+    public func startSignInWithAppleFlow(
+        delegate: ASAuthorizationControllerDelegate? = nil,
+        presentationContextProvider: ASAuthorizationControllerPresentationContextProviding? = nil
+    ) async throws -> ASAuthorization {
+        let nonce = Self.randomNonceString()
+        currentUnhashedNonce = nonce
+
+        let appleIDProvider = ASAuthorizationAppleIDProvider()
+        let request = appleIDProvider.createRequest()
+        request.requestedScopes = [.fullName, .email]
+        request.nonce = Self.sha256(nonce)
+
+        let authorizationController = ASAuthorizationController(authorizationRequests: [request])
+        if let delegate {
+            authorizationController.delegate = delegate
+        } else {
+            authorizationController.delegate = self
+        }
+
+        if let presentationContextProvider {
+            authorizationController.presentationContextProvider = presentationContextProvider
+        }
+
+        let result: ASAuthorization = try await withUnsafeThrowingContinuation { [weak self] continuation in
+            authorizationController.performRequests()
+            self?.startSignInWithAppleFlowContinuation = continuation
+        }
+
+        return result
+    }
+
     public func startSignInWithAppleFlow(
         delegate: ASAuthorizationControllerDelegate? = nil,
         presentationContextProvider: ASAuthorizationControllerPresentationContextProviding? = nil
@@ -122,6 +155,7 @@ extension AppleProvider: ASAuthorizationControllerDelegate {
         didCompleteWithAuthorization authorization: ASAuthorization
     ) {
         authorizationSubject.send(authorization)
+        startSignInWithAppleFlowContinuation?.resume(returning: authorization)
     }
 
     public func authorizationController(controller _: ASAuthorizationController,
@@ -129,5 +163,6 @@ extension AppleProvider: ASAuthorizationControllerDelegate {
         // Handle error.
         print("Sign in with Apple errored: \(error)")
         authorizationSubject.send(completion: .failure(error))
+        startSignInWithAppleFlowContinuation?.resume(throwing: error)
     }
 }
