@@ -145,7 +145,15 @@ public struct FirebaseAuthenticationService: Authenticating {
     }
 
     public func deleteUser() async throws {
-        try await auth.currentUser?.delete()
+        guard let user = auth.currentUser else {
+            throw "Not found user"
+        }
+
+        if user.authProviderLinks.contains(where: { $0.provider == .apple }) {
+            try await revokeAppleToken()
+        }
+
+        try await user.delete()
     }
 
     public func reauthenticate(with provider: BasicSignInProvider) async throws -> AuthResult {

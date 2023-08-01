@@ -48,10 +48,20 @@ public protocol Authenticating {
 
     func reauthenticate(with provider: BasicSignInProvider) async throws -> AuthResult
     func reauthenticate(with provider: BasicSignInProvider) -> AnyPublisher<AuthResult, Error>
+
     func reauthenticate(
         with provider: OAuthSignInProvider,
         presentingView: PlatformPresentingView
     ) -> AnyPublisher<AuthResult, Error>
+
+    func reauthenticate(
+        with provider: OAuthSignInProvider
+    ) async throws -> AuthResult
+
+    func reauthenticate(
+        with provider: OAuthSignInProvider,
+        presentingView: PlatformPresentingView
+    ) async throws -> AuthResult
 
     func revokeAppleToken() async throws
 }
@@ -78,6 +88,20 @@ public extension Authenticating {
             )
         }
         return try await signIn(with: provider, presentingView: presentingView)
+    }
+
+    @MainActor
+    func reauthenticate(
+        with provider: OAuthSignInProvider
+    ) async throws -> AuthResult {
+        guard let presentingView = Self.getPresentingView() else {
+            throw NSError(
+                domain: String(describing: Authenticating.self),
+                code: 1_000,
+                userInfo: [NSLocalizedDescriptionKey: "Not found presenting view"]
+            )
+        }
+        return try await reauthenticate(with: provider, presentingView: presentingView)
     }
 
     @MainActor

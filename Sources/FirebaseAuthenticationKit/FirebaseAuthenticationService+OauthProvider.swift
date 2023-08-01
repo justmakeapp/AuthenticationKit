@@ -1,5 +1,5 @@
 //
-//  FirebaseAuthenticationService+OAuthSignInProvider.swift
+//  FirebaseAuthenticationService+OauthProvider.swift
 //
 //
 //  Created by longvu on 23/06/2023.
@@ -12,6 +12,8 @@ import Firebase
 import Foundation
 
 public extension FirebaseAuthenticationService {
+    // MARK: - Sign in
+
     func signIn(
         with provider: OAuthSignInProvider,
         presentingView: PlatformPresentingView
@@ -36,7 +38,7 @@ public extension FirebaseAuthenticationService {
                 return Deferred {
                     Future<AuthResult, Error> { promise in
                         let unknownError = NSError(
-                            domain: "",
+                            domain: Bundle.main.bundleIdentifier!,
                             code: 1_000,
                             userInfo: [NSLocalizedDescriptionKey: "Cannot login!"]
                         )
@@ -60,13 +62,40 @@ public extension FirebaseAuthenticationService {
             .eraseToAnyPublisher()
     }
 
+    // MARK: - Reauthenticate
+
+    func reauthenticate(
+        with provider: OAuthSignInProvider,
+        presentingView: PlatformPresentingView
+    ) async throws -> AuthResult {
+        guard let currentUser = auth.currentUser else {
+            let error = NSError(
+                domain: Bundle.main.bundleIdentifier!,
+                code: 1_000,
+                userInfo: [NSLocalizedDescriptionKey: "Can not found user!"]
+            )
+            throw error
+        }
+
+        let (authCredential, additionalInfo) = try await signInAndGetCredentialOAuth2(
+            from: provider,
+            presentingView: presentingView
+        )
+
+        let authResult = try await currentUser.reauthenticate(with: authCredential)
+        return AuthResult(
+            user: authResult.user,
+            additionalInfo: additionalInfo
+        )
+    }
+
     func reauthenticate(
         with provider: OAuthSignInProvider,
         presentingView: PlatformPresentingView
     ) -> AnyPublisher<AuthResult, Error> {
         guard let currentUser = auth.currentUser else {
             let error = NSError(
-                domain: "",
+                domain: Bundle.main.bundleIdentifier!,
                 code: 1_000,
                 userInfo: [NSLocalizedDescriptionKey: "Can not found user!"]
             )
@@ -85,7 +114,7 @@ public extension FirebaseAuthenticationService {
                             }
                             guard let authResult else {
                                 let error = NSError(
-                                    domain: "",
+                                    domain: Bundle.main.bundleIdentifier!,
                                     code: 1_000,
                                     userInfo: [NSLocalizedDescriptionKey: "Content can not be empty!"]
                                 )
@@ -107,6 +136,7 @@ public extension FirebaseAuthenticationService {
 
     func revokeAppleToken() async throws {
         let provider = AppleProvider()
+
         let authorization = try await provider.startSignInWithAppleFlow()
 
         guard let appleAuthCode = try provider.makeAppleAuthCode(from: authorization) else {
@@ -119,7 +149,6 @@ public extension FirebaseAuthenticationService {
         }
 
         try await auth.revokeToken(withAuthorizationCode: appleAuthCode)
-        try await auth.currentUser?.delete()
     }
 
     // MARK: - Helpers
