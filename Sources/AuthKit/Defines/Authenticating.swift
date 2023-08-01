@@ -52,6 +52,8 @@ public protocol Authenticating {
         with provider: OAuthSignInProvider,
         presentingView: PlatformPresentingView
     ) -> AnyPublisher<AuthResult, Error>
+
+    func revokeAppleToken() async throws
 }
 
 public extension Authenticating {

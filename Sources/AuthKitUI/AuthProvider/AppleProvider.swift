@@ -129,6 +129,26 @@ public class AppleProvider: NSObject {
 }
 
 extension AppleProvider: ASAuthorizationControllerDelegate {
+    public func makeAppleAuthCode(from authorization: ASAuthorization) throws -> String? {
+        switch authorization.credential {
+        case let appleIDCredential as ASAuthorizationAppleIDCredential:
+
+            guard currentUnhashedNonce != nil else {
+                throw "Invalid state: A login callback was received, but no login request was sent."
+            }
+            guard let appleAuthCode = appleIDCredential.authorizationCode else {
+                throw "Unable to fetch authorization code"
+            }
+            guard let authCodeString = String(data: appleAuthCode, encoding: .utf8) else {
+                throw "Unable to serialize auth code string from data: \(appleAuthCode.debugDescription)"
+            }
+
+            return authCodeString
+        default:
+            return nil
+        }
+    }
+
     public func makeAuthCredential(from authorization: ASAuthorization) -> AppleAuthResult? {
         switch authorization.credential {
         case let appleIDCredential as ASAuthorizationAppleIDCredential:

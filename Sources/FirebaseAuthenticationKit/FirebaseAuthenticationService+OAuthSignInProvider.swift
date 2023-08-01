@@ -103,6 +103,27 @@ public extension FirebaseAuthenticationService {
             .eraseToAnyPublisher()
     }
 
+    // MARK: - RevokeToken
+
+    func revokeAppleToken() async throws {
+        let provider = AppleProvider()
+        let authorization = try await provider.startSignInWithAppleFlow()
+
+        guard let appleAuthCode = try provider.makeAppleAuthCode(from: authorization) else {
+            let error = NSError(
+                domain: Bundle.main.bundleIdentifier!,
+                code: 1_000,
+                userInfo: [NSLocalizedDescriptionKey: "Can not get apple authorization code"]
+            )
+            throw error
+        }
+
+        try await auth.revokeToken(withAuthorizationCode: appleAuthCode)
+        try await auth.currentUser?.delete()
+    }
+
+    // MARK: - Helpers
+
     private func signInAndGetCredentialOAuth2(
         from provider: OAuthSignInProvider,
         presentingView: PlatformPresentingView
