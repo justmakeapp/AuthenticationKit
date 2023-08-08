@@ -1,0 +1,10 @@
+project_id: "606759"
+api_token_env: CROWDIN_API_TOKEN
+base_path: .
+base_url: https://api.crowdin.com
+preserve_hierarchy: true
+
+files:
+  - source: /Sources/AuthKitL10n/Resources/en.lproj/*.strings
+    dest: /%original_file_name%
+    translation: /Sources/AuthKitL10n/Resources/%osx_code%/%original_file_name%
