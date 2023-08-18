@@ -1,0 +1,32 @@
+"action.continue" = "Continuar";
+"action.signInWith" = "Iniciar sessão com o %@";
+"action.signIn" = "Iniciar sessão";
+"action.signUp" = "Registar-se";
+"action.signInToApp" = "Iniciar sessão em %@";
+"action.register" = "Registar";
+"action.registerWithEmail" = "Registar com email";
+"action.forgotPassword" = "Esqueceu sua senha?";
+"action.resetPassword" = "Redefinir senha";
+
+"error.emailNotValid" = "Email não é válido.";
+"error.passwordMustHaveAtLeast" = "A senha deve ter pelo menos %d caracteres.";
+
+"message.passwordResetLinkWasSent" = "A redefinição de senha foi enviada com sucesso";
+"message.checkMailForLink" = "Por favor, verifique seu e-mail para o link de verificação";
+"message.appExtensionRequireAuth" = "Abra %@ e faça login para compartilhar.";
+
+"name" = "Nome";
+"email" = "Email";
+"password" = "Senha";
+"or" = "ou";
+
+"signIn.welcomeTo" = "Benvido ao %@";
+"signIn.dontHaveAnAccount" = "Não tem uma conta?";
+"signIn.forgotYourPassword" = "Esqueceu a sua senha?";
+
+"signUp.bySelectingSignUpBelowIAgreeTo" = "Ao selecionar se inscrever abaixo, eu concordo com ";
+
+"termAndConditions" = "Termos e Condições";
+"privacyPolicy" = "Política de Privacidade";
+
+"and" = "e";

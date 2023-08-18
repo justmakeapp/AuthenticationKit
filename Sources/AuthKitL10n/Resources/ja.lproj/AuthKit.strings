@@ -11,8 +11,8 @@
 "error.emailNotValid" = "Emailは有効ではありません";
 "error.passwordMustHaveAtLeast" = "パスワードは少なくとも %d文字が必要です。";
 
-"message.passwordResetLinkWasSent" = "The password reset was successfully sent";
-"message.checkMailForLink" = "Please check your email for the verification link";
+"message.passwordResetLinkWasSent" = "パスワードのリセットが正常に送信されました";
+"message.checkMailForLink" = "確認リンクについてはメールをご確認ください";
 "message.appExtensionRequireAuth" = "%@ を開き、サインインして共有します。";
 
 "name" = "名前";
