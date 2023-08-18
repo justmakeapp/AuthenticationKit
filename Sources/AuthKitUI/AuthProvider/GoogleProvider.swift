@@ -18,7 +18,7 @@ public enum GoogleProvider {
     ) async throws -> GoogleAuthResult {
         let user = try await requestGoogleAuthentication(presentingView: presentingView)
 
-        guard let result = Self.makeGoogleAuthResult(from: user) else {
+        guard let result = makeGoogleAuthResult(from: user) else {
             throw "Can not make google auth result"
         }
 
@@ -34,7 +34,7 @@ public enum GoogleProvider {
                     return nil
                 }
 
-                return Self.makeGoogleAuthResult(from: user)
+                return makeGoogleAuthResult(from: user)
             }
             .eraseToAnyPublisher()
     }

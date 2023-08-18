@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  AuthUser+Extension.swift
 //
 //
 //  Created by Bình Nguyễn Thanh on 11/12/2022.

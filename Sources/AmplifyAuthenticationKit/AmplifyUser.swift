@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  AmplifyUser.swift
 //
 //
 //  Created by Bình Nguyễn Thanh on 13/12/2022.

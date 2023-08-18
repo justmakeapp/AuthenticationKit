@@ -40,7 +40,7 @@ public extension CustomSignInButton {
         case apple
         case google
 
-        internal var image: Image {
+        var image: Image {
             switch self {
             case .apple:
                 return Image("AppleIcon", bundle: .module)
@@ -51,7 +51,7 @@ public extension CustomSignInButton {
             }
         }
 
-        internal var title: String {
+        var title: String {
             switch self {
             case .apple:
                 return L10n.Action.signInWith("Apple")
@@ -60,7 +60,7 @@ public extension CustomSignInButton {
             }
         }
 
-        internal var style: AnyButtonStyle {
+        var style: AnyButtonStyle {
             switch self {
             case .apple:
                 return AppleStyle().eraseToAnyButtonStyle()

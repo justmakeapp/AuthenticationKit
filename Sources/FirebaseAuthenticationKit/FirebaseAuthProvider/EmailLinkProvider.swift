@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  EmailLinkProvider.swift
 //
 //
 //  Created by Long Vu on 12/06/2022.

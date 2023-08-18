@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  AmplifyAuthenticationService.swift
 //
 //
 //  Created by Bình Nguyễn Thanh on 12/12/2022.
