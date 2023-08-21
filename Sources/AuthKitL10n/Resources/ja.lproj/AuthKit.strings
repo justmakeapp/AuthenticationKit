@@ -26,7 +26,9 @@
 
 "signUp.bySelectingSignUpBelowIAgreeTo" = "以下でサインアップを選択することで、以下に同意します ";
 
-"termAndConditions" = "利用条件";
-"privacyPolicy" = "プライバシーポリシー";
+// Legal
+"legal.title" = "Legal";
+"legal.termsAndConditions" = "利用条件";
+"legal.privacyPolicy" = "プライバシーポリシー";
 
 "and" = "および";

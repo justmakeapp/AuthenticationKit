@@ -249,11 +249,11 @@ private extension SignUpView {
         @ViewBuilder
         private var agreementView: some View {
             let termsOfServiceText = try? Self.makeHyperlinkMarkdownAttibutedText(
-                L10n.termAndConditions,
+                L10n.Legal.termsAndConditions,
                 url: termsAndConditionsURL
             )
             let privacyPolicyText = try? Self.makeHyperlinkMarkdownAttibutedText(
-                L10n.privacyPolicy,
+                L10n.Legal.privacyPolicy,
                 url: privacyPolicyURL
             )
             if let termsOfServiceText, let privacyPolicyText {

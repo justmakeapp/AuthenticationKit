@@ -20,10 +20,6 @@ public enum L10n {
     public static let or = L10n.tr("AuthKit", "or", fallback: "or")
     /// Password
     public static let password = L10n.tr("AuthKit", "password", fallback: "Password")
-    /// Privacy Policy
-    public static let privacyPolicy = L10n.tr("AuthKit", "privacyPolicy", fallback: "Privacy Policy")
-    /// Term and Conditions
-    public static let termAndConditions = L10n.tr("AuthKit", "termAndConditions", fallback: "Term and Conditions")
     public enum Action {
         /// Continue
         public static let `continue` = L10n.tr("AuthKit", "action.continue", fallback: "Continue")
@@ -67,6 +63,19 @@ public enum L10n {
                 fallback: "Password must have at least %d characters."
             )
         }
+    }
+
+    public enum Legal {
+        /// Privacy Policy
+        public static let privacyPolicy = L10n.tr("AuthKit", "legal.privacyPolicy", fallback: "Privacy Policy")
+        /// Terms and Conditions
+        public static let termsAndConditions = L10n.tr(
+            "AuthKit",
+            "legal.termsAndConditions",
+            fallback: "Terms and Conditions"
+        )
+        /// Legal
+        public static let title = L10n.tr("AuthKit", "legal.title", fallback: "Legal")
     }
 
     public enum Message {

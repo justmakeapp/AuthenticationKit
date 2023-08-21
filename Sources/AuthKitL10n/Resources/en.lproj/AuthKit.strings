@@ -26,7 +26,9 @@
 
 "signUp.bySelectingSignUpBelowIAgreeTo" = "By selecting Sign Up below, I agree to ";
 
-"termAndConditions" = "Term and Conditions";
-"privacyPolicy" = "Privacy Policy";
+// Legal
+"legal.title" = "Legal";
+"legal.termsAndConditions" = "Terms and Conditions";
+"legal.privacyPolicy" = "Privacy Policy";
 
 "and" = "and";

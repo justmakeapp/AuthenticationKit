@@ -26,7 +26,9 @@
 
 "signUp.bySelectingSignUpBelowIAgreeTo" = "Bằng cách bấm vào nút Đăng ký bên dưới, tôi đồng ý với ";
 
-"termAndConditions" = "Các điều khoản và điều kiện";
-"privacyPolicy" = "Chính sách quyền riêng tư";
+// Legal
+"legal.title" = "Pháp lý";
+"legal.termsAndConditions" = "Các điều khoản và điều kiện";
+"legal.privacyPolicy" = "Chính sách quyền riêng tư";
 
 "and" = "và";
