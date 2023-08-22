@@ -23,6 +23,8 @@ public enum L10n {
     public enum Action {
         /// Continue
         public static let `continue` = L10n.tr("AuthKit", "action.continue", fallback: "Continue")
+        /// Continue as Guest
+        public static let continueAsGuest = L10n.tr("AuthKit", "action.continueAsGuest", fallback: "Continue as Guest")
         /// Forgot password?
         public static let forgotPassword = L10n.tr("AuthKit", "action.forgotPassword", fallback: "Forgot password?")
         /// Register

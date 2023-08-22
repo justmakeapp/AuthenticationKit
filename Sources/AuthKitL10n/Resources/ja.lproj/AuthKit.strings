@@ -1,3 +1,4 @@
+"action.continueAsGuest" = "ゲストとして続ける";
 "action.continue" = "続行";
 "action.signInWith" = "%@ でサインインする";
 "action.signIn" = "サインイン";
@@ -27,7 +28,7 @@
 "signUp.bySelectingSignUpBelowIAgreeTo" = "以下でサインアップを選択することで、以下に同意します ";
 
 // Legal
-"legal.title" = "Legal";
+"legal.title" = "法律上";
 "legal.termsAndConditions" = "利用条件";
 "legal.privacyPolicy" = "プライバシーポリシー";
 

@@ -81,13 +81,10 @@ public struct AuthView: View {
             if config.enabledPasswordBasedMethod {
                 passwordBasedView
             } else {
-                #if DEBUG
-                    ZStack {
-                        continueAsGuestButton
-                    }
-                    .padding(.vertical)
-
-                #endif
+                ZStack {
+                    continueAsGuestButton
+                }
+                .padding(.vertical)
             }
 
             Spacer()
@@ -315,18 +312,16 @@ public struct AuthView: View {
         .buttonStyle(.plain)
     }
 
-    #if DEBUG
-        private var continueAsGuestButton: some View {
-            DebounceButton {
-                config.onContinueAsGuest()
-            } label: {
-                Text("Continue As Guest")
-                    .font(.body)
-                    .foregroundColor(.accentColor)
-            }
-            .buttonStyle(.plain)
+    private var continueAsGuestButton: some View {
+        DebounceButton {
+            config.onContinueAsGuest()
+        } label: {
+            Text(L10n.Action.continueAsGuest)
+                .font(.body)
+                .foregroundColor(.accentColor)
         }
-    #endif
+        .buttonStyle(.plain)
+    }
 
     private var closeButton: some View {
         ZStack {
@@ -432,9 +427,7 @@ public extension AuthView {
         var onSignIn: () -> Void = {}
         var onOauthSignIn: (_ authProvider: OAuthSignInProvider) -> Void = { _ in }
         var onSignUp: () -> Void = {}
-        #if DEBUG
-            var onContinueAsGuest: () -> Void = {}
-        #endif
+        var onContinueAsGuest: () -> Void = {}
     }
 
     func appName(_ value: String) -> Self {
@@ -461,11 +454,9 @@ public extension AuthView {
         then { $0.config.onSignUp = value }
     }
 
-    #if DEBUG
-        func onContinueAsGuest(_ value: @escaping () -> Void) -> Self {
-            then { $0.config.onContinueAsGuest = value }
-        }
-    #endif
+    func onContinueAsGuest(_ value: @escaping () -> Void) -> Self {
+        then { $0.config.onContinueAsGuest = value }
+    }
 }
 
 // MARK: - Previews
