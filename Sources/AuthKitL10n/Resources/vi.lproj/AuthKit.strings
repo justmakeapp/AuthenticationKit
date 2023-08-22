@@ -8,7 +8,13 @@
 "action.registerWithEmail" = "Đăng ký với email";
 "action.forgotPassword" = "Quên mật khẩu?";
 "action.resetPassword" = "Đặt lại mật khẩu";
+"action.agree" = "Đồng ý";
 
+// alert
+"alert.confirmation" = "Xác nhận";
+
+
+// error
 "error.emailNotValid" = "Email không hợp lệ.";
 "error.passwordMustHaveAtLeast" = "Mật khẩu phải có ít nhất %d ký tự";
 
@@ -20,7 +26,9 @@
 "email" = "Email";
 "password" = "Mật khẩu";
 "or" = "hoặc";
+"and" = "và";
 
+"signIn.signInMethods" = "Phương thức Đăng nhập";
 "signIn.welcomeTo" = "Chào mừng đến với %@";
 "signIn.dontHaveAnAccount" = "Chưa có tài khoản?";
 "signIn.forgotYourPassword" = "Quên mật khẩu?";
@@ -32,4 +40,8 @@
 "legal.termsAndConditions" = "Các điều khoản và điều kiện";
 "legal.privacyPolicy" = "Chính sách quyền riêng tư";
 
-"and" = "và";
+// Link Auth Provider
+"linkAuthProvider.action.link" = "Liên kết";
+"linkAuthProvider.action.unlink" = "Hủy liên kết";
+"linkAuthProvider.unlinkQuestion" = "Bạn có muốn huỷ liên kết với nhà cung cấp này không?";
+"linkAuthProvider.linkApple" = "Bạn có muốn liên kết thông tin Apple với dữ liệu ứng dụng không?";

@@ -8,7 +8,13 @@
 "action.registerWithEmail" = "メールで登録";
 "action.forgotPassword" = "パスワードをお忘れですか?";
 "action.resetPassword" = "パスワードをリセット";
+"action.agree" = "同意する";
 
+// alert
+"alert.confirmation" = "確認";
+
+
+// error
 "error.emailNotValid" = "Emailは有効ではありません";
 "error.passwordMustHaveAtLeast" = "パスワードは少なくとも %d文字が必要です。";
 
@@ -20,7 +26,9 @@
 "email" = "メール";
 "password" = "パスワード";
 "or" = "または";
+"and" = "および";
 
+"signIn.signInMethods" = "ログイン方法";
 "signIn.welcomeTo" = "%@ へようこそ";
 "signIn.dontHaveAnAccount" = "アカウントをお持ちではありませんか？";
 "signIn.forgotYourPassword" = "パスワードをお忘れですか？";
@@ -32,4 +40,8 @@
 "legal.termsAndConditions" = "利用条件";
 "legal.privacyPolicy" = "プライバシーポリシー";
 
-"and" = "および";
+// Link Auth Provider
+"linkAuthProvider.action.link" = "リンク";
+"linkAuthProvider.action.unlink" = "リンク解除";
+"linkAuthProvider.unlinkQuestion" = "このプロバイダーとのリンクを解除しますか？";
+"linkAuthProvider.linkApple" = "アップルの情報とアプリケーションのデータを関連付けたいですか？";

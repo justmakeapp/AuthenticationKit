@@ -8,7 +8,13 @@
 "action.registerWithEmail" = "Register with email";
 "action.forgotPassword" = "Forgot password?";
 "action.resetPassword" = "Reset password";
+"action.agree" = "Agree";
 
+// alert
+"alert.confirmation" = "Confirmation";
+
+
+// error
 "error.emailNotValid" = "Email is not valid.";
 "error.passwordMustHaveAtLeast" = "Password must have at least %d characters.";
 
@@ -20,7 +26,9 @@
 "email" = "Email";
 "password" = "Password";
 "or" = "or";
+"and" = "and";
 
+"signIn.signInMethods" = "Sign in methods";
 "signIn.welcomeTo" = "Welcome to %@";
 "signIn.dontHaveAnAccount" = "Don't have an account?";
 "signIn.forgotYourPassword" = "Forgot your password?";
@@ -32,4 +40,8 @@
 "legal.termsAndConditions" = "Terms and Conditions";
 "legal.privacyPolicy" = "Privacy Policy";
 
-"and" = "and";
+// Link Auth Provider
+"linkAuthProvider.action.link" = "Link";
+"linkAuthProvider.action.unlink" = "Unlink";
+"linkAuthProvider.unlinkQuestion" = "Do you want to unlink this provider?";
+"linkAuthProvider.linkApple" = "Do you want to associate your Apple information with your application data?";

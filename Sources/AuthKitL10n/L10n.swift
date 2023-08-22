@@ -21,6 +21,8 @@ public enum L10n {
     /// Password
     public static let password = L10n.tr("AuthKit", "password", fallback: "Password")
     public enum Action {
+        /// Agree
+        public static let agree = L10n.tr("AuthKit", "action.agree", fallback: "Agree")
         /// Continue
         public static let `continue` = L10n.tr("AuthKit", "action.continue", fallback: "Continue")
         /// Continue as Guest
@@ -53,6 +55,11 @@ public enum L10n {
         public static let signUp = L10n.tr("AuthKit", "action.signUp", fallback: "Sign Up")
     }
 
+    public enum Alert {
+        /// Confirmation
+        public static let confirmation = L10n.tr("AuthKit", "alert.confirmation", fallback: "Confirmation")
+    }
+
     public enum Error {
         /// Email is not valid.
         public static let emailNotValid = L10n.tr("AuthKit", "error.emailNotValid", fallback: "Email is not valid.")
@@ -78,6 +85,27 @@ public enum L10n {
         )
         /// Legal
         public static let title = L10n.tr("AuthKit", "legal.title", fallback: "Legal")
+    }
+
+    public enum LinkAuthProvider {
+        /// Do you want to associate your Apple information with your application data?
+        public static let linkApple = L10n.tr(
+            "AuthKit",
+            "linkAuthProvider.linkApple",
+            fallback: "Do you want to associate your Apple information with your application data?"
+        )
+        /// Do you want to unlink this provider?
+        public static let unlinkQuestion = L10n.tr(
+            "AuthKit",
+            "linkAuthProvider.unlinkQuestion",
+            fallback: "Do you want to unlink this provider?"
+        )
+        public enum Action {
+            /// Link
+            public static let link = L10n.tr("AuthKit", "linkAuthProvider.action.link", fallback: "Link")
+            /// Unlink
+            public static let unlink = L10n.tr("AuthKit", "linkAuthProvider.action.unlink", fallback: "Unlink")
+        }
     }
 
     public enum Message {
@@ -118,6 +146,8 @@ public enum L10n {
             "signIn.forgotYourPassword",
             fallback: "Forgot your password?"
         )
+        /// Sign in methods
+        public static let signInMethods = L10n.tr("AuthKit", "signIn.signInMethods", fallback: "Sign in methods")
         /// Welcome to %@
         public static func welcomeTo(_ p1: Any) -> String {
             return L10n.tr("AuthKit", "signIn.welcomeTo", String(describing: p1), fallback: "Welcome to %@")

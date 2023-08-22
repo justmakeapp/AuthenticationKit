@@ -151,6 +151,48 @@ public extension FirebaseAuthenticationService {
         try await auth.revokeToken(withAuthorizationCode: appleAuthCode)
     }
 
+    // MARK: - Link
+
+    func link(
+        with provider: OAuthSignInProvider,
+        presentingView: PlatformPresentingView
+    ) async throws -> AuthResult {
+        switch provider {
+        case .google:
+            let googleAuthResult = try await GoogleProvider.getCredential(
+                presentingView: presentingView
+            )
+            guard let authResult = try await link(.withGoogle(
+                idToken: googleAuthResult.idToken,
+                accessToken: googleAuthResult.accessToken
+            )) else {
+                throw "Can not link google with \(googleAuthResult)"
+            }
+            return authResult
+
+        case .apple:
+            let provider = AppleProvider()
+            let authorization = try await provider.startSignInWithAppleFlow()
+
+            guard let result = provider.makeAuthCredential(from: authorization) else {
+                let error = NSError(
+                    domain: "",
+                    code: 1_000,
+                    userInfo: [NSLocalizedDescriptionKey: "Can not authenticate with Apple"]
+                )
+                throw error
+            }
+
+            guard let authResult = try await link(
+                .withApple(idToken: result.idToken, nonce: result.nonce)
+            ) else {
+                throw "Can not link apple with \(result)"
+            }
+
+            return authResult
+        }
+    }
+
     // MARK: - Helpers
 
     private func signInAndGetCredentialOAuth2(

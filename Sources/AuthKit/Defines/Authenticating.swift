@@ -42,8 +42,16 @@ public protocol Authenticating {
     func resetPassword(with email: String) async throws
 
     func sendEmailVeritification() async throws
+
     func unlink(from providerID: String) async throws -> AuthUser?
+
     func link(_ method: LinkMethod) async throws -> AuthResult?
+    func link(with provider: OAuthSignInProvider) async throws -> AuthResult
+    func link(
+        with provider: OAuthSignInProvider,
+        presentingView: PlatformPresentingView
+    ) async throws -> AuthResult
+
     func deleteUser() async throws
 
     func reauthenticate(with provider: BasicSignInProvider) async throws -> AuthResult
@@ -74,6 +82,18 @@ public extension Authenticating {
 
     func link(_: LinkMethod) async throws -> AuthResult? {
         return nil
+    }
+
+    @MainActor
+    func link(with provider: OAuthSignInProvider) async throws -> AuthResult {
+        guard let presentingView = Self.getPresentingView() else {
+            throw NSError(
+                domain: String(describing: Authenticating.self),
+                code: 1_000,
+                userInfo: [NSLocalizedDescriptionKey: "Not found presenting view"]
+            )
+        }
+        return try await link(with: provider, presentingView: presentingView)
     }
 
     func deleteUser() async throws {}
