@@ -10,8 +10,12 @@ import AuthKitL10n
 import SwiftUI
 
 public struct LinkAuthProviderSection: View {
-    @State private var isShowUnlinkConfirm = false
-    @State private var isShowLinkAppleConfirm = false
+    enum AlertType {
+        case isShowUnlinkConfirm
+        case isShowLinkAppleConfirm
+    }
+
+    @State private var alertType: AlertType?
 
     @State private var targetLinkProvider: AuthProvider?
     @State private var unlinkProvider: AuthProvider?
@@ -44,19 +48,14 @@ public struct LinkAuthProviderSection: View {
                     buttonTapped(data)
                 }
                 .padding(.vertical, 8)
-                .overlay(
-                    ZStack {
-                        Spacer()
-                            .alert(isPresented: $isShowUnlinkConfirm) {
-                                unlinkAlert
-                            }
-
-                        Spacer()
-                            .alert(isPresented: $isShowLinkAppleConfirm) {
-                                linkAppleAlert
-                            }
+                .alert(using: $alertType, content: { alertType in
+                    switch alertType {
+                    case .isShowUnlinkConfirm:
+                        return unlinkAlert
+                    case .isShowLinkAppleConfirm:
+                        return linkAppleAlert
                     }
-                )
+                })
             }
         } header: {
             Text(L10n.SignIn.signInMethods.uppercased())
@@ -91,17 +90,17 @@ public struct LinkAuthProviderSection: View {
     private func buttonTapped(_ data: AuthProviderLink) {
         let provider = data.provider
         if data.isLinked {
-            isShowUnlinkConfirm = true
+            alertType = .isShowUnlinkConfirm
             unlinkProvider = provider
         } else {
             if provider == .apple {
-                isShowLinkAppleConfirm = true
+                alertType = .isShowLinkAppleConfirm
                 targetLinkProvider = .apple
             } else {
                 if let appleProvider = authProviderLinks.first(where: { $0.provider == .apple }),
                    appleProvider.email != nil {
                     // sign in with apple => then want link to another auth provider
-                    isShowLinkAppleConfirm = true
+                    alertType = .isShowLinkAppleConfirm
                     targetLinkProvider = provider
                 } else {
                     link?(provider)
