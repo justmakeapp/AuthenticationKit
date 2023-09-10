@@ -13,7 +13,7 @@ import Combine
     public typealias PlatformPresentingView = UIViewController
 #endif
 
-#if canImport(AppKit)
+#if canImport(AppKit) && os(macOS)
     import AppKit.NSWindow
 
     public typealias PlatformPresentingView = NSWindow
