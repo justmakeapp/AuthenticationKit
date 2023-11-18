@@ -22,7 +22,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/google/GoogleSignIn-iOS", exact: "7.0.0"),
-        .package(url: "https://github.com/firebase/firebase-ios-sdk", exact: "10.14.0"),
+        .package(url: "https://github.com/firebase/firebase-ios-sdk", exact: "10.18.0"),
 //        .package(url: "https://github.com/aws-amplify/amplify-swift", exact: "2.11.7"),
 //        .package(url: "https://github.com/CombineCommunity/CombineExt", exact: "1.8.1"),
         .package(path: "../CommonKitUI"),
