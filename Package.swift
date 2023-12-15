@@ -28,7 +28,7 @@ let package = Package(
         .package(path: "../CommonKitUI"),
         .package(path: "../FoundationX"),
         .package(url: "https://github.com/mhdhejazi/Dynamic.git", exact: "1.2.0"),
-        .package(url: "https://github.com/SwiftUIX/SwiftUIX", exact: "0.1.6")
+        .package(url: "https://github.com/SwiftUIX/SwiftUIX", exact: "0.1.9")
     ],
     targets: [
         .target(
